@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export async function POST(request) {
   const { token, paymentProvider, amount } = await request.json();
-  const { NEXT_PUBLIC_AZAMPAY_CHECKOUT_URL, NEXT_PUBLIC_AZAMPAY_API_KEY } = process.env;
+  const { NEXT_PUBLIC_AZAMPAY_CHECKOUT_URL, TOKEN, NEXT_PUBLIC_AZAMPAY_API_KEY } = process.env;
 
   try {
     const response = await axios.post(
@@ -17,7 +17,7 @@ export async function POST(request) {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${TOKEN}`,
           'X-API-Key': NEXT_PUBLIC_AZAMPAY_API_KEY
         }
       }
