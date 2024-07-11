@@ -1,12 +1,9 @@
-import React from 'react'
-import Payments from '../components/Payments'
+import Checkout from "../components/checkout";
 
-const Page = () => {
+export default function Home() {
   return (
-    <>
-    <Payments />
-    </>
-  )
+    <div>
+      <Checkout />
+    </div>
+  );
 }
-
-export default Page;

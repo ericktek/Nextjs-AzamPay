@@ -1,32 +1,20 @@
+import { NextResponse } from 'next/server';
 import axios from 'axios';
 
-export async function POST(req, res) {
-  const appName = process.env.APP_NAME;
-  const clientId = process.env.CLIENT_ID;
-  const clientSecret = process.env.CLIENT_SECRETE_KEY;
-
+export async function POST(request) {
+  const { NEXT_PUBLIC_AZAMPAY_AUTH_URL, NEXT_PUBLIC_AZAMPAY_CLIENT_ID, NEXT_PUBLIC_AZAMPAY_CLIENT_SECRET } = process.env;
 
   try {
-    const response = await axios.post('https://authenticator-sandbox.azampay.co.tz/AppRegistration/GenerateToken', {
-      appName,
-      clientId,
-      clientSecret,
+    const response = await axios.post(NEXT_PUBLIC_AZAMPAY_AUTH_URL, {
+      appName: 'e-app',
+      clientId: NEXT_PUBLIC_AZAMPAY_CLIENT_ID,
+      clientSecret: NEXT_PUBLIC_AZAMPAY_CLIENT_SECRET,
     });
+    console.log(response.data.data.accessToken);
 
-    // Log the response data to understand its structure
-    console.log('Response data:', response.data);
-
-    return new Response(JSON.stringify(response.data), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return NextResponse.json(response.data, { status: 200 });
   } catch (error) {
-    // Log the error
-    console.error('Error:', error.response ? error.response.data : error.message);
-
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    console.error('Error occurred during POST request:', error.message);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
