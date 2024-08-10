@@ -1,26 +1,18 @@
-import axios from 'axios';
+import axios from "axios";
 
 export const AccessToken = async () => {
-  const AUTHENTICATOR_URL = process.env.NEXT_PUBLIC_AUTHENTICATOR_URL;
-  const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
-  const CLIENT_SECRET = process.env.NEXT_PUBLIC_CLIENT_SECRET;
-  const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME;
+  try {
+    const response = await axios.post("/api/generateToken");
 
-  const data = {
-    CLIENT_ID,
-    CLIENT_SECRET,
-    APP_NAME,
-  };
-
-
-    await axios.post(AUTHENTICATOR_URL, data)
-      .then(response => {
-        console.log('Response:', response.data);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+    if (response.status === 200) {
+      return response.data.data.accessToken; // Return only the token
+    } else {
+      throw new Error('Token generation failed');
+    }
+  } catch (err) {
+    console.log("Failed to generate token:", err);
+    return null; 
+  }
 };
 
 export default AccessToken;
-
