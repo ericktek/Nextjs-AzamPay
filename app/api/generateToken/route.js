@@ -1,20 +1,19 @@
 import { NextResponse } from 'next/server';
-import axios from 'axios';
 
 export async function POST(request) {
-  const { NEXT_PUBLIC_AZAMPAY_AUTH_URL, NEXT_PUBLIC_AZAMPAY_CLIENT_ID, NEXT_PUBLIC_AZAMPAY_CLIENT_SECRET } = process.env;
-
   try {
-    const response = await axios.post(NEXT_PUBLIC_AZAMPAY_AUTH_URL, {
-      appName: 'e-app',
-      clientId: NEXT_PUBLIC_AZAMPAY_CLIENT_ID,
-      clientSecret: NEXT_PUBLIC_AZAMPAY_CLIENT_SECRET,
-    });
-    console.log(response.data.data.accessToken);
+    const data = await request.json();
+    // Example: Replace with actual token generation logic
+    const token = generateToken(data); // Your function to generate a token
 
-    return NextResponse.json(response.data, { status: 200 });
+    if (!token) {
+      throw new Error('Token generation failed');
+    }
+
+    return NextResponse.json({ token });
   } catch (error) {
-    console.error('Error occurred during POST request:', error.message);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    console.error('Error generating token:', error.message);
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
