@@ -1,21 +1,27 @@
 import { NextResponse } from 'next/server';
 
+let callbackStatus = 'No callback received yet'; // Example status, use a real status tracking mechanism
+
+export async function GET() {
+  return NextResponse.json({ status: callbackStatus });
+}
+
 export async function POST(request) {
   try {
-    const callbackData = await request.json(); // Parse the JSON body
+    const callbackData = await request.json();
 
-    console.log('Callback data:', callbackData); // Log for debugging
+    // Handle the callback data
+    console.log('Received callback data:', callbackData);
 
-    // Extract necessary details from callback data
-    const { transactionId, status, message } = callbackData;
+    // Update the status based on the callback data
+    callbackStatus = 'Callback processed successfully';
 
-    // Process the callback data
-    // Example: Update your database or notify users
-    // await updateTransactionStatus(transactionId, status, message);
-
-    return NextResponse.json({ message: 'Callback processed successfully' }, { status: 200 });
+    return NextResponse.json({ message: 'Callback received successfully.' }, { status: 200 });
   } catch (error) {
     console.error('Error processing callback:', error);
-    return NextResponse.json({ error: 'Failed to process callback' }, { status: 500 });
+
+    callbackStatus = 'Failed to process callback';
+
+    return NextResponse.json({ error: 'Failed to process callback.' }, { status: 500 });
   }
 }

@@ -18,7 +18,7 @@ export async function POST(request) {
   const headers = {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${token}`, // Ensure token is provided
-    'X-API-Key': apiKey, // Ensure API key is provided
+    'X-API-Key': 'API-KEY' // Ensure API key is provided
   };
 
   try {
